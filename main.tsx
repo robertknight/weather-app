@@ -5,14 +5,22 @@ import 'babel/polyfill';
 import {getLocation, getTodaysWeather} from './weather';
 import {lookupPlaceByName} from './geonames';
 
+type DegreesCentigrade = number;
+type DegreesKelvin = number;
+
 interface ForecastAt {
 	date: Date,
 	summary: string;
 	iconURL: string;
+	temp: DegreesKelvin;
 }
 
 interface ForecastViewProps {
 	forecasts: ForecastAt[]
+}
+
+function kelvinToCelsius(kelvin: DegreesKelvin): DegreesCentigrade {
+	return kelvin - 273.15;
 }
 
 function timeString(date: Date) {
@@ -27,6 +35,7 @@ class ForecastView extends React.Component<ForecastViewProps,{}> {
 		let forecasts = this.props.forecasts.map(forecast =>
 		<tr className="forecast-view-row" key={forecast.date.getTime()}>
 			<td className="forecast-view-time">{timeString(forecast.date)}</td>
+			<td className="forecast-view-temp">{Math.round(kelvinToCelsius(forecast.temp)) + '°C'}</td>
 			<td className="forecast-view-summary">{forecast.summary}</td>
 			<td className="forecast-view-icon"><img src={forecast.iconURL}/></td>
 		</tr>);
@@ -99,7 +108,8 @@ async function displayWeather(placeName?: string) {
 		const forecasts = weather.map(forecast => ({
 			date: new Date(forecast.dt * 1000),
 			summary: forecast.weather[0].description,
-			iconURL: `https://openweathermap.org/img/w/${forecast.weather[0].icon}.png`
+			iconURL: `https://openweathermap.org/img/w/${forecast.weather[0].icon}.png`,
+			temp: forecast.main.temp
 		}))
 		  .filter(forecast => forecast.date.getDay() === currentDate.getDay());
 		React.render(<AppView onChangeLocation={onChangeLocation} summary={summary} forecasts={forecasts}/>,

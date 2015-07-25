@@ -34,6 +34,9 @@ export module OpenWeatherMap {
 	export interface Forecast {
 	  dt: UNIXTimestamp;
 	  weather: WeatherSummary[];
+    main: {
+      temp: number;
+    };
 	}
 
 	export interface WeatherSummary {
