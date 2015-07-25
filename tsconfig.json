@@ -12,7 +12,8 @@
 		"outDir": "build/ts"
     },
     "files": [
-		"main.tsx",
-        "weather.ts"
+		"src/main.tsx",
+		"src/geonames.ts",
+        "src/weather.ts"
     ]
 }
