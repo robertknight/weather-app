@@ -11,6 +11,7 @@
   "devDependencies": {
     "babel": "^5.8.5",
     "typescript": "^1.6.0-dev.20150725",
+    "typescript-project-utils": "^1.0.0",
     "webpack": "^1.10.5"
   },
   "dependencies": {

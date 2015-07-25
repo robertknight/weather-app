@@ -1,5 +1,3 @@
-/// <reference path="typings/tsd.d.ts" />
-
 import fetch from 'isomorphic-fetch';
 
 // ip-api.com location query response.

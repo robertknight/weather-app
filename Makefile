@@ -1,13 +1,20 @@
 NODE_BIN_DIR=./node_modules/.bin
 
-dist/main-bundle.js: build/js/main.js build/js/weather.js
+ts_files:=$(shell $(NODE_BIN_DIR)/tsproject inputs)
+compiled_ts_files:=$(shell $(NODE_BIN_DIR)/tsproject outputs)
+
+dist/main-bundle.js: $(compiled_ts_files)
 	webpack
 
-build/js/weather.js build/js/main.js: main.tsx weather.ts
+# http://stackoverflow.com/a/10609434/434243
+$(compiled_ts_files): ts.intermediate
+.INTERMEDIATE: ts.intermediate
+
+ts.intermediate: $(ts_files)
 	$(NODE_BIN_DIR)/tsc 
 	$(NODE_BIN_DIR)/babel build/ts --out-dir build/js
 
-run: build/js/weather.js
+run: $(compiled_ts_files)
 	node $<
 
 watch:
@@ -18,4 +25,7 @@ watch:
 clean:
 	rm -rf build dist
 
-.SILENT:
+format:
+	$(NODE_BIN_DIR)/format-typescript-source
+
+//.SILENT:
